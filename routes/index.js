@@ -1,55 +1,17 @@
 const express = require("express");
-const { check } = require("express-validator");
-const jwt = require("jsonwebtoken");
-const { ObjectId } = require("mongodb");
-const { UserRepository } = require("../repositories/index");
-const { loginUser, registerUser } = require("../services/index");
+const { loginUser, registerUser, userResources } = require("../services/index");
+const {  loginValidation, registerValidation, isAuthenticated } = require("../middleware/index");
 const { Router } = express;
 const router = Router();
 
-// GET method route
-router.get("/user", async (req, res) => {
-  const token = req.headers.authorization;
-  jwt.verify(token, `secret`, async (err, decoded) => {
-    if (err) {
-      console.log(err);
-    } else {
-      const user = await UserRepository.findOne({
-        _id: ObjectId(decoded.accessToken),
-      });
-      res.json({ user });
-    }
-  });
-});
+router.get("/user", isAuthenticated, userResources);
 
-// POST method route
-// Input field must not be empty
-router.post(
-  "/registration",
-  check("email").isEmail().withMessage("Input field must not be empty"),
-  check("password")
-    .isLength({ min: 5 })
-    .withMessage("Must be at least 5 chars long"),
-  async (req, res) => registerUser(req, res)
-);
+router.post("/registration", registerValidation, registerUser);
 
-router.post(
-  "/login",
-  check("email").isEmail().withMessage("Input field must not be empty"),
-  check("password")
-    .isLength({ min: 5 })
-    .withMessage("Must be at least 5 chars long"),
-  async (req, res) => loginUser(req, res)
-);
+router.post("/login", loginValidation, loginUser);
 
-// PUT method route
-router.put("/", async (req, res) => {
-  res.send("POST request to the homepage");
-});
+router.put("/", isAuthenticated);
 
-// DELETE method route
-router.delete("/", async (req, res) => {
-  res.send("POST request to the homepage");
-});
+router.delete("/", isAuthenticated);
 
 module.exports = { router };
