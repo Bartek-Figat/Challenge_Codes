@@ -1,17 +1,18 @@
 const express = require("express");
 const { loginUser, registerUser, userResources } = require("../services/index");
-const {  loginValidation, registerValidation, isAuthenticated } = require("../middleware/index");
+const {  isAuthenticated } = require("../middleware/index");
+const {  loginValidation, registerValidation } = require("../validation/index");
 const { Router } = express;
 const router = Router();
 
-router.get("/user", isAuthenticated, userResources);
+router.get("/api/v1/user", isAuthenticated, userResources);
 
-router.post("/registration", registerValidation, registerUser);
+router.post("/api/v1/registration", registerValidation, registerUser);
 
-router.post("/login", loginValidation, loginUser);
+router.post("/api/v1/login", loginValidation, loginUser);
 
-router.put("/", isAuthenticated);
+router.put("/api/v1/", isAuthenticated);
 
-router.delete("/", isAuthenticated);
+router.delete("/api/v1/", isAuthenticated);
 
 module.exports = { router };

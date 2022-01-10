@@ -15,3 +15,5 @@
   npm install 
   npm run dev
 ```
+
+### Authorization: Bearer JWT_ACCESS_TOKEN

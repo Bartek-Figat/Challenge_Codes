@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 require("dotenv").config();
 const { Database } = require("../db/index");
 

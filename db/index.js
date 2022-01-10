@@ -1,8 +1,5 @@
 const { MongoClient } = require("mongodb");
-const index = {
-  Users: 'users',
-  Db: 'test'
-}
+const { index } = require("./db.config");
 
 class Database {
   static async connect(dbURI, dbOptions) {

@@ -1,31 +1,19 @@
-const jwt = require("jsonwebtoken");
-const { check } = require("express-validator");
-const { StatusCode } = require("../utils/index");
-const registerValidation = [
-  check("email").isEmail().withMessage("Input field must not be empty"),
-  check("password")
-    .isLength({ min: 5 })
-    .withMessage("Must be at least 5 chars long"),
-];
-
-const loginValidation = [
-  check("email").isEmail().withMessage("Input field must not be empty"),
-  check("password")
-    .isLength({ min: 5 })
-    .withMessage("Must be at least 5 chars long"),
-];
+const jwt = require('jsonwebtoken');
+const { StatusCode } = require('../utils/index');
 
 const isAuthenticated = (req, res, next) => {
-  const token = req.headers.authorization;
-  jwt.verify(token, `secret`, async (err, decoded) => {
-    if (err) res.status(StatusCode.NOT_FOUND);
-    req.user = decoded;
-    next();
-  });
-};
+    const authHeader = req.headers.authorization;
 
-module.exports = {
-  loginValidation,
-  registerValidation,
-  isAuthenticated
-};
+    const token = authHeader && authHeader.split(' ')[1];
+
+    if (token === null) return res.status(StatusCode.UNAUTHORIZED).json({ status: `${StatusCode.UNAUTHORIZED}` });
+
+    jwt.verify(token, `secret`, async (err, decoded) => {
+        if (err) return res.status(StatusCode.FORBIDDEN).json({ status: `${StatusCode.FORBIDDEN}` });
+        req.user = decoded;
+        next();
+    });
+}
+
+module.exports = { isAuthenticated };
+
