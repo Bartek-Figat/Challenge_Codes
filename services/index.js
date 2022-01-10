@@ -76,4 +76,34 @@ const userResources = async (req, res) => {
     }
 };
 
-module.exports = { loginUser, registerUser, userResources };
+
+const saveChanges = async (req, res) => {
+    try {
+        const { email } = req.body;
+        const id = req.user.generateAccessToken;
+        const filter = { _id: ObjectId(id) };
+        const update = { $set: email };
+        const user = await UserRepository.updateOne(filter, update);
+        return res.json({ user });
+    } catch (err) {
+        return res
+            .status(StatusCode.INTERNAL_SERVER_ERROR)
+            .json({ status: `${StatusCode.INTERNAL_SERVER_ERROR}` });
+    }
+};
+
+const deleteToken = async (req, res) => {
+    try {
+        return res
+            .status(StatusCode.SUCCESS)
+            .json({ status: `${StatusCode.SUCCESS}` });
+    } catch (err) {
+        return res
+            .status(StatusCode.INTERNAL_SERVER_ERROR)
+            .json({ status: `${StatusCode.INTERNAL_SERVER_ERROR}` });
+    }
+};
+
+
+
+module.exports = { loginUser, registerUser, userResources, deleteToken, saveChanges };
