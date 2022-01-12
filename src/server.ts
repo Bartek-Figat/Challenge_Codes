@@ -1,12 +1,12 @@
-const express = require("express");
-const cors = require("cors");
-const helemt = require("helmet");
-const compression = require("compression");
-const morgan = require("morgan");
+import express, { Express } from "express";
+import cors from "cors";
+import helemt from "helmet";
+import compression  from "compression";
+import morgan from "morgan";
 const { router} = require("./routes/index")
 const Port = 8080;
 
-const server = express();
+const server: Express = express();
 server.use(express.urlencoded({ extended: true }));
 server.use(express.json());
 server.use(compression());

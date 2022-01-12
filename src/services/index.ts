@@ -1,12 +1,13 @@
-const { validationResult } = require('express-validator');
-const { ObjectId } = require('mongodb');
-const { UserRepository } = require('../repositories/index');
-const { hash, compare } = require('bcrypt');
-const jwt = require('jsonwebtoken');
-const { StatusCode } = require('../utils/index');
+import { Request, Response, NextFunction} from 'express';
+import { validationResult } from 'express-validator';
+import { ObjectId } from 'mongodb';
+import { UserRepository } from '../repositories/index';
+import { hash, compare } from 'bcrypt';
+import { sign } from 'jsonwebtoken';
+import { StatusCode } from '../utils/index';
 const saltRounds = 10;
 
-const registerUser = async (req, res) => {
+export const registerUser = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
@@ -15,8 +16,8 @@ const registerUser = async (req, res) => {
                 .json({ errors: errors.array() })
         }
         const { email, password } = req.body;
-        const emailValid = await UserRepository.findOne({ email });
-        if (emailValid)
+        const emailValid = await UserRepository.findOne({ email }, null);
+        if (emailValid === null)
             return res
                 .status(StatusCode.BAD_REQUEST)
                 .json({ status: `${StatusCode.BAD_REQUEST}` });
@@ -37,7 +38,7 @@ const registerUser = async (req, res) => {
     }
 };
 
-const loginUser = async (req, res) => {
+export const loginUser = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
     try {
         const errors = validationResult(req)
         if (!errors.isEmpty()) {
@@ -46,11 +47,11 @@ const loginUser = async (req, res) => {
                 .json({ errors: errors.array() })
         }
         const { email, password } = req.body;
-        const user = await UserRepository.findOne({ email });
+        const user: any = await UserRepository.findOne({ email }, null);
         const match = user && (await compare(password, user.isValidPassword));
 
         if (!match) return res.status(StatusCode.NOT_FOUND).json({ status: `${StatusCode.NOT_FOUND}` });
-        const generateAccessToken = jwt.sign(
+        const generateAccessToken = sign(
             { generateAccessToken: user._id },
             `secret`
         );
@@ -62,10 +63,11 @@ const loginUser = async (req, res) => {
     }
 };
 
-const userResources = async (req, res) => {
+
+export const userResources = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
     try {
-        const id = req.user.generateAccessToken;
-        const query = { _id: ObjectId(id) };
+        const { generateAccessToken } = req.user;
+        const query = { _id: new ObjectId(generateAccessToken) };
         const options = { projection: { isValidPassword: 0 } };
         const user = await UserRepository.findOne(query, options);
         return res.json({ user });
@@ -77,13 +79,13 @@ const userResources = async (req, res) => {
 };
 
 
-const saveChanges = async (req, res) => {
+export const saveChanges = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
     try {
         const { email } = req.body;
-        const id = req.user.generateAccessToken;
-        const filter = { _id: ObjectId(id) };
+        const { generateAccessToken } = req.user;
+        const filter = { _id: new ObjectId(generateAccessToken) };
         const update = { $set: email };
-        const user = await UserRepository.updateOne(filter, update);
+        const user = await UserRepository.updateOne(filter, update, null);
         return res.json({ user });
     } catch (err) {
         return res
@@ -92,7 +94,7 @@ const saveChanges = async (req, res) => {
     }
 };
 
-const deleteToken = async (req, res) => {
+export const deleteToken = async (req: Request, res: Response, next: NextFunction) => {
     try {
         return res
             .status(StatusCode.SUCCESS)
@@ -104,6 +106,3 @@ const deleteToken = async (req, res) => {
     }
 };
 
-
-
-module.exports = { loginUser, registerUser, userResources, deleteToken, saveChanges };

@@ -1,4 +1,7 @@
-const StatusCode = {
+import { Status } from "../types/types"
+
+
+export const StatusCode: Status = {
     SUCCESS: 200,
     CREATED: 201,
     NO_CONTENT: 204,
@@ -9,6 +12,4 @@ const StatusCode = {
     INTERNAL_SERVER_ERROR: 500,
   };
   
-  module.exports = {
-    StatusCode,
-  };
+ 
