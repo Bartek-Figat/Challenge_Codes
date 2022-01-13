@@ -5,7 +5,6 @@ import { dbOptionsType } from '../types/types'
 
 const dbOptions: dbOptionsType = {
     useUnifiedTopology: true,
-    useNewdbURIParser: true,
     useNewUrlParser: true,
 }
 
@@ -40,7 +39,7 @@ export class UserRepository {
         }
     }
 
-    static async findOne(query: any, options: any) {
+    static async findOne(query: any, options: {}) {
         const { collection, client } = await this.db.connect(dbURI, dbOptions)
         try {
             return await collection.findOne(query, options)

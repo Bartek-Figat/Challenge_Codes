@@ -16,8 +16,8 @@ export const registerUser = async (req: Request, res: Response, next: NextFuncti
                 .json({ errors: errors.array() })
         }
         const { email, password } = req.body;
-        const emailValid = await UserRepository.findOne({ email }, null);
-        if (emailValid === null)
+        const emailValid = await UserRepository.findOne({ email }, {});
+        if (emailValid)
             return res
                 .status(StatusCode.BAD_REQUEST)
                 .json({ status: `${StatusCode.BAD_REQUEST}` });
@@ -47,8 +47,12 @@ export const loginUser = async (req: Request, res: Response, next: NextFunction)
                 .json({ errors: errors.array() })
         }
         const { email, password } = req.body;
-        const user: any = await UserRepository.findOne({ email }, null);
+        console.log(email)
+        console.log(password)
+        const user: any = await UserRepository.findOne({ email }, {});
+        console.log(user)
         const match = user && (await compare(password, user.isValidPassword));
+        console.log(match)
 
         if (!match) return res.status(StatusCode.NOT_FOUND).json({ status: `${StatusCode.NOT_FOUND}` });
         const generateAccessToken = sign(
@@ -57,6 +61,7 @@ export const loginUser = async (req: Request, res: Response, next: NextFunction)
         );
         return res.json({ generateAccessToken });
     } catch (err) {
+        console.log(err)
         return res
             .status(StatusCode.INTERNAL_SERVER_ERROR)
             .json({ status: `${StatusCode.INTERNAL_SERVER_ERROR}` });
@@ -64,8 +69,10 @@ export const loginUser = async (req: Request, res: Response, next: NextFunction)
 };
 
 
+
 export const userResources = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
     try {
+        console.log(req.user)
         const { generateAccessToken } = req.user;
         const query = { _id: new ObjectId(generateAccessToken) };
         const options = { projection: { isValidPassword: 0 } };

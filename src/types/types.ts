@@ -20,6 +20,7 @@ export type Status = {
 
 export type dbOptionsType = {
     useUnifiedTopology: boolean
-    useNewdbURIParser: boolean
     useNewUrlParser: boolean
 }
+
+

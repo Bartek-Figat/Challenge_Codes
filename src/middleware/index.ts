@@ -2,11 +2,6 @@ import { Request, Response, NextFunction } from 'express'
 import { JwtPayload, verify } from 'jsonwebtoken'
 import { StatusCode } from '../utils/index'
 
-export interface IPayload {
-    _id: string;
-    iat: number;
-}
-
 
 export const isAuthenticated = async (
     req: Request,
