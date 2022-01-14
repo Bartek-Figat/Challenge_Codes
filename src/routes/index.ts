@@ -1,24 +1,26 @@
-import {Request, Response, NextFunction, Router } from "express";
-import{  loginUser, registerUser, userResources, saveChanges, deleteToken } from "../services/index";
-import {  isAuthenticated } from "../middleware/index";
-import {  loginValidation, registerValidation } from "../validation/index";
-const router = Router();
+import { Router } from 'express'
+import {
+    loginUser,
+    registerUser,
+    userResources,
+    saveChanges,
+    deleteToken,
+} from '../services/index'
+import { isAuthenticated } from '../middleware/index'
+import { loginValidation, registerValidation } from '../validation/index'
+const router = Router({
+    caseSensitive: true,
+    strict: true,
+});
 
-interface CustomRequest extends Request {
-    user: {
-        generateAccessToken: string
-    };
-  }
+router.get('/api/v1/user', isAuthenticated, userResources)
 
+router.post('/api/v1/registration', registerValidation, registerUser)
 
-router.get("/api/v1/user", isAuthenticated, userResources);
+router.post('/api/v1/login', loginValidation, loginUser)
 
-router.post("/api/v1/registration", registerValidation, registerUser);
+router.put('/api/v1/update', isAuthenticated, saveChanges)
 
-router.post("/api/v1/login", loginValidation, loginUser);
+router.delete('/api/v1/logout', isAuthenticated, deleteToken)
 
-router.put("/api/v1/update", isAuthenticated, saveChanges);
-
-router.delete("/api/v1/logout", deleteToken);
-
-export default router;
+export default router

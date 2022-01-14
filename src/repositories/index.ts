@@ -1,9 +1,11 @@
 /* eslint-disable no-undef */
-require('dotenv').config()
+import dotenv from 'dotenv';
 import { Database } from '../db/index'
 import { dbOptionsType } from '../types/types'
 
-const dbOptions: dbOptionsType = {
+dotenv.config();
+
+export const dbOptions: dbOptionsType = {
     useUnifiedTopology: true,
     useNewUrlParser: true,
 }

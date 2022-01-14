@@ -1,4 +1,4 @@
-import { MongoClient } from 'mongodb'
+import { MongoClient } from 'mongodb';
 import { Index } from '../types/types';
 
 const index: Index = {
