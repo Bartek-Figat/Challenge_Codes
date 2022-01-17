@@ -1,26 +1,26 @@
-import { Router } from 'express'
-import {
-    loginUser,
-    registerUser,
-    userResources,
-    saveChanges,
-    deleteToken,
-} from '../services/index'
-import { isAuthenticated } from '../middleware/index'
-import { loginValidation, registerValidation } from '../validation/index'
+import { Router } from 'express';
+import { UserService } from '../services/index';
+import { isAuthenticated } from '../middleware/index';
+import { loginValidation, registerValidation } from '../validation/index';
 const router = Router({
-    caseSensitive: true,
-    strict: true,
+  caseSensitive: true,
+  strict: true,
 });
 
-router.get('/api/v1/user', isAuthenticated, userResources)
+const getUser = new UserService().getUser;
+const login = new UserService().login;
+const createUser = new UserService().createUser;
+const updateUser = new UserService().updateUser;
+const removeToken = new UserService().removeToken;
 
-router.post('/api/v1/registration', registerValidation, registerUser)
+router.get('/api/v1/user', isAuthenticated, getUser);
 
-router.post('/api/v1/login', loginValidation, loginUser)
+router.post('/api/v1/registration', registerValidation, createUser);
 
-router.put('/api/v1/update', isAuthenticated, saveChanges)
+router.post('/api/v1/login', loginValidation, login);
 
-router.delete('/api/v1/logout', isAuthenticated, deleteToken)
+router.put('/api/v1/update', isAuthenticated, updateUser);
 
-export default router
+router.delete('/api/v1/logout', isAuthenticated, removeToken);
+
+export default router;

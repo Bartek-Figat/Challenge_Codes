@@ -1,26 +1,24 @@
 export type Index = {
-    Users: string
-    Db: string
-}
+  Users: string;
+  Db: string;
+};
 
 export type HeaderToken = {
-    token: string
-}
+  token: string;
+};
 
 export type Status = {
-    SUCCESS: number
-    CREATED: number
-    NO_CONTENT: number
-    BAD_REQUEST: number
-    UNAUTHORIZED: number
-    FORBIDDEN: number
-    NOT_FOUND: number
-    INTERNAL_SERVER_ERROR: number
-}
+  SUCCESS: number;
+  CREATED: number;
+  NO_CONTENT: number;
+  BAD_REQUEST: number;
+  UNAUTHORIZED: number;
+  FORBIDDEN: number;
+  NOT_FOUND: number;
+  INTERNAL_SERVER_ERROR: number;
+};
 
 export type dbOptionsType = {
-    useUnifiedTopology: boolean
-    useNewUrlParser: boolean
-}
-
-
+  useUnifiedTopology: boolean;
+  useNewUrlParser: boolean;
+};
