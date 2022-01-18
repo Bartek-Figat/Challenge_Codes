@@ -7,8 +7,8 @@ import { dbOptionsType } from '../types/types';
 dotenv.config();
 
 export const dbOptions: dbOptionsType = {
-  useUnifiedTopology: true,
   useNewUrlParser: true,
+  useUnifiedTopology: true,
 };
 
 interface ProcessEnv {
