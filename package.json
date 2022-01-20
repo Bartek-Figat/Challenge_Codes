@@ -4,7 +4,8 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "dev": "nodemon --exec ts-node src/server.ts"
+    "dev": "nodemon --exec ts-node src/server.ts",
+    "serv:dev": "pm2 startOrRestart ecosystem.config.js --env dev"
   },
   "keywords": [],
   "author": "",
