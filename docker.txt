@@ -1,0 +1,18 @@
+  # expose:
+  #   - 8080
+  # ports:
+  #   - 8080:8080
+  # docker-compose down --remove-orphans
+  # docker-compose up -d --build
+  # docker-compose logs -f backend
+  # ls -la
+  # docker inspect f6f
+  # docker inspect  -f '{{.GraphDriver.Data.LowerDir}}' f6f
+  # docker inspect  -f '{{.GraphDriver.Data.LowerDir}}' f6f | tr ':' '\n' | tail -n 1 
+  # docker rm -f f6f
+  # cat package.json | jq '.scripts.dev'
+  # docker-compose ps 
+  # docker compose ls
+  # docker-compose exex api anchore-cli system feeds list
+  # docker-compose --project-name MERN up -d --build
+  # docker exec -it mongo mongo

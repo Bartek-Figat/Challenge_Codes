@@ -61,6 +61,7 @@ export class UserService {
       const query = { _id: new ObjectId(generateAccessToken) };
       const options = { projection: { isValidPassword: 0 } };
       const user = await new UserRepository().findOne(query, options);
+      if (!user) return res.status(StatusCode.NOT_FOUND).json({ status: StatusCode.NOT_FOUND });
       return res.format({
         'application/json': () => {
           res.send({ user });
